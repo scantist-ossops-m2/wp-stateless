@@ -271,6 +271,10 @@ namespace wpCloud\StatelessMedia {
           }
 
           $image_sizes = self::get_path_and_url($metadata, $attachment_id);
+
+          Helper::debug( '$image_sizes: ' );
+          Helper::debug( json_encode($image_sizes) );
+
           foreach ($image_sizes as $size => $img) {
             if ((isset($_REQUEST['size']) && $_REQUEST['size'] == $size) || empty($_REQUEST['size'])) {
               // GCS metadata
@@ -333,8 +337,12 @@ namespace wpCloud\StatelessMedia {
                       'contentDisposition' => $_contentDisposition
                     ));
 
+                  Helper::debug( '$media: ' );
+                  Helper::debug( json_encode($media) );
+    
                   $cloud_meta = self::generate_cloud_meta($cloud_meta, $media, $size, $img, $bucketLink);
                 } catch (\Throwable $th) {
+                  Helper::debug($th->getMessage());
                   //throw $th;
                 }
               } else {
@@ -447,6 +455,7 @@ namespace wpCloud\StatelessMedia {
               $metadata['height'] = $_image_size[1];
             }
           } catch (\Exception $e) {
+            Helper::debug($e->getMessage());
             // lets do nothing.
           }
         }
